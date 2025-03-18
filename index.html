@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="darkreader-lock">
+  <title>Countdown to WEEKEND</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #121212;
+      color: #fff;
+    }
+
+    .countdown {
+      text-align: center;
+      background-color: #1e1e1e;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .time {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #a0a0a0;
+    }
+
+    .unit {
+      font-size: 1.2rem;
+      color: #888;
+    }
+
+    .time span {
+      margin: 0 8px;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 20px;
+      text-align: center;
+      font-size: 1rem;
+      color: #888;
+    }
+
+    footer a {
+      color: #4da6ff;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="countdown">
+    <h1>Countdown naar WEEKEND</h1>
+    <div class="time" id="countdown">
+      <span id="days"></span> dagen
+      <span id="hours"></span> uren 
+      <span id="minutes"></span> minuten
+      <span id="seconds"></span> seconden
+      <span id="milliseconds"></span> milliseconden
+    </div>
+  </div>
+
+  <footer>
+    <p>click <a href="https://github.com/BjarneVerschorre/bijna-weeked.nl/" target="_blank">here</a> for the source</p>
+  </footer>
+
+  <script>
+    function updateCountdown() {
+      const now = new Date();
+      let nextFriday = new Date(now);
+      
+      // Set nextFriday to Friday at 5 PM
+      nextFriday.setDate(now.getDate() + (5 - now.getDay() + 7) % 7);
+      nextFriday.setHours(17, 0, 0, 0); // 5 PM
+
+      // If it's already past 5 PM on Friday, move to next Friday
+      if (now > nextFriday) {
+        nextFriday.setDate(nextFriday.getDate() + 7);
+      }
+
+      const timeDiff = nextFriday - now;
+
+      // Time calculations
+      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+      const milliseconds = (timeDiff % 1000).toString().padStart(3, '0'); // Ensure 3-digit format
+
+      // Update the DOM elements
+      document.getElementById('days').textContent = days;
+      document.getElementById('hours').textContent = hours;
+      document.getElementById('minutes').textContent = minutes;
+      document.getElementById('seconds').textContent = seconds;
+      document.getElementById('milliseconds').textContent = milliseconds;
+    }
+
+    // Update every 1ms for smooth milliseconds
+    setInterval(updateCountdown, 1);
+    updateCountdown(); // Initialize immediately
+  </script>
+<!-- Hey -->
+</body>
+</html>
