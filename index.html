@@ -6,7 +6,7 @@
   <meta name="description" content="Daily countdown to the weekend!">
   <meta name="keywords" content="weekend, countdown, time, days, hours, minutes, seconds, milliseconds">
   <meta name="author" content="Bjarne Verschorre">
-  <meta name="theme-color" content="#121212">
+  <meta name="theme-color" content="#F4C921">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="darkreader-lock">
@@ -79,8 +79,8 @@
       <span id="days"></span> <span class="unit" id="days-unit">dagen</span>
       <span id="hours"></span> <span class="unit" id="hours-unit">uren</span>
       <span id="minutes"></span> <span class="unit" id="minutes-unit">minuten</span>
-      <span id="seconds"></span> <span class="unit">seconden</span>
-      <span id="milliseconds"></span> <span class="unit">milliseconden</span>
+      <span id="seconds"></span> <span class="unit" id="seconds-unit">seconden</span>
+      <span id="milliseconds"></span> <span class="unit" id="milliseconds-unit">milliseconden</span>
     </div>
   </div>
 
@@ -119,9 +119,9 @@
       document.getElementById('minutes').textContent = hours > 0 || minutes > 0 ? minutes : '';
       document.getElementById('minutes-unit').textContent = hours > 0 || minutes > 0 ? (minutes === 1 ? 'minuut' : 'minuten') : '';
       document.getElementById('seconds').textContent = seconds;
-      document.querySelector('.unit:nth-of-type(4)').textContent = seconds === 1 ? 'seconde' : 'seconden';
+      document.getElementById('seconds-unit').textContent = seconds === 1 ? 'seconde' : 'seconden';
       document.getElementById('milliseconds').textContent = milliseconds;
-      document.querySelector('.unit:nth-of-type(5)').textContent = milliseconds === 1 ? 'milliseconde' : 'milliseconden';
+      document.getElementById('milliseconds-unit').textContent = milliseconds === 1 ? 'milliseconde' : 'milliseconden';
     }
 
     // Update every 1ms for smooth milliseconds
