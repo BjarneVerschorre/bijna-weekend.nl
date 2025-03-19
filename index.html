@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="Daily countdown to the weekend!">
+  <meta name="keywords" content="weekend, countdown, time, days, hours, minutes, seconds, milliseconds">
+  <meta name="author" content="Bjarne Verschorre">
+  <meta name="theme-color" content="#121212">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="darkreader-lock">
   <title>Countdown to WEEKEND</title>
@@ -65,15 +70,16 @@
     }
   </style>
 </head>
+
 <body>
   <div class="countdown">
     <h1>Countdown naar WEEKEND</h1>
     <div class="time" id="countdown">
-      <span id="days"></span> dagen
-      <span id="hours"></span> uren 
-      <span id="minutes"></span> minuten
-      <span id="seconds"></span> seconden
-      <span id="milliseconds"></span> milliseconden
+      <span id="days"></span> <span class="unit" id="days-unit">dagen</span>
+      <span id="hours"></span> <span class="unit" id="hours-unit">uren</span>
+      <span id="minutes"></span> <span class="unit" id="minutes-unit">minuten</span>
+      <span id="seconds"></span> <span class="unit">seconden</span>
+      <span id="milliseconds"></span> <span class="unit">milliseconden</span>
     </div>
   </div>
 
@@ -85,7 +91,7 @@
     function updateCountdown() {
       const now = new Date();
       let nextFriday = new Date(now);
-      
+
       // Set nextFriday to Friday at 5 PM
       nextFriday.setDate(now.getDate() + (5 - now.getDay() + 7) % 7);
       nextFriday.setHours(17, 0, 0, 0); // 5 PM
@@ -99,23 +105,26 @@
 
       // Time calculations
       const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-      const milliseconds = (timeDiff % 1000).toString().padStart(3, '0'); // Ensure 3-digit format
+      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+      const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+      const milliseconds = (timeDiff % 1000).toString().padStart(3, '0');
 
-      // Update the DOM elements
-      document.getElementById('days').textContent = days;
-      document.getElementById('hours').textContent = hours;
-      document.getElementById('minutes').textContent = minutes;
-      document.getElementById('seconds').textContent = seconds;
-      document.getElementById('milliseconds').textContent = milliseconds;
+      // Update the labels
+      document.querySelector('.time').innerHTML = `
+        ${days > 0 ? `<span id="days">${days}</span> ${days === 1 ? 'dag' : 'dagen'}` : ''}
+        ${hours > 0 ? `<span id="hours">${hours}</span> ${hours === 1 ? 'uur' : 'uren'}` : ''}
+        ${minutes > 0 ? `<span id="minutes">${minutes}</span> ${minutes === 1 ? 'minuut' : 'minuten'}` : ''}
+        <span id="seconds">${seconds}</span> ${seconds === 1 ? 'seconde' : 'seconden'}
+        <span id="milliseconds">${milliseconds}</span> ${milliseconds === 1 ? 'milliseconde' : 'milliseconden'}
+      `;
     }
 
     // Update every 1ms for smooth milliseconds
     setInterval(updateCountdown, 1);
     updateCountdown(); // Initialize immediately
   </script>
-<!-- Hey -->
+  <!-- Hey -->
 </body>
+
 </html>
