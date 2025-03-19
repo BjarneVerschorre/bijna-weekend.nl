@@ -7,9 +7,10 @@
   <meta name="keywords" content="weekend, countdown, time, days, hours, minutes, seconds, milliseconds">
   <meta name="author" content="Bjarne Verschorre">
   <meta name="theme-color" content="#121212">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="darkreader-lock">
-  <title>Countdown to WEEKEND</title>
+  <title>Bijna WEEKEND! 🎉</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -111,20 +112,22 @@
       const milliseconds = (timeDiff % 1000).toString().padStart(3, '0');
 
       // Update the labels
-      document.querySelector('.time').innerHTML = `
-        ${days > 0 ? `<span id="days">${days}</span> ${days === 1 ? 'dag' : 'dagen'}` : ''}
-        ${hours > 0 ? `<span id="hours">${hours}</span> ${hours === 1 ? 'uur' : 'uren'}` : ''}
-        ${minutes > 0 ? `<span id="minutes">${minutes}</span> ${minutes === 1 ? 'minuut' : 'minuten'}` : ''}
-        <span id="seconds">${seconds}</span> ${seconds === 1 ? 'seconde' : 'seconden'}
-        <span id="milliseconds">${milliseconds}</span> ${milliseconds === 1 ? 'milliseconde' : 'milliseconden'}
-      `;
+      document.getElementById('days').textContent = days > 0 ? days : '';
+      document.getElementById('days-unit').textContent = days > 0 ? (days === 1 ? 'dag' : 'dagen') : '';
+      document.getElementById('hours').textContent = days > 0 || hours > 0 ? hours : '';
+      document.getElementById('hours-unit').textContent = days > 0 || hours > 0 ? (hours === 1 ? 'uur' : 'uren') : '';
+      document.getElementById('minutes').textContent = hours > 0 || minutes > 0 ? minutes : '';
+      document.getElementById('minutes-unit').textContent = hours > 0 || minutes > 0 ? (minutes === 1 ? 'minuut' : 'minuten') : '';
+      document.getElementById('seconds').textContent = seconds;
+      document.querySelector('.unit:nth-of-type(4)').textContent = seconds === 1 ? 'seconde' : 'seconden';
+      document.getElementById('milliseconds').textContent = milliseconds;
+      document.querySelector('.unit:nth-of-type(5)').textContent = milliseconds === 1 ? 'milliseconde' : 'milliseconden';
     }
 
     // Update every 1ms for smooth milliseconds
     setInterval(updateCountdown, 1);
     updateCountdown(); // Initialize immediately
   </script>
-  <!-- Hey -->
 </body>
 
 </html>
