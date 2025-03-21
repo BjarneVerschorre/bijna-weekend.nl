@@ -74,7 +74,7 @@
 
 <body>
   <div class="countdown">
-    <h1>Countdown naar WEEKEND</h1>
+    <h1 id="countdown-naar">Countdown naar WEEKEND</h1>
     <div class="time" id="countdown">
       <span id="days"></span> <span class="unit" id="days-unit">dagen</span>
       <span id="hours"></span> <span class="unit" id="hours-unit">uren</span>
@@ -92,43 +92,75 @@
   <script>
     function updateCountdown() {
       const now = new Date();
-      let nextFriday = new Date(now);
-
+      const day = now.getDay(); // 0 = Sunday, 5 = Friday, 6 = Saturday
+      const hours = now.getHours();
+  
+      const countdownEl = document.getElementById('countdown');
+      const countdownNaarEl = document.getElementById('countdown-naar');
+      const weekendMessageId = 'weekend-message';
+  
+      // Check if we are in the weekend window (Friday 5 PM - Monday 12 AM)
+      const isWeekendTime =
+        (day === 5 && hours >= 17) || // Friday after 5 PM
+        day === 6 || // Saturday all day
+        (day === 0) || // Sunday all day
+        (day === 1 && hours === 0); // Monday until 12 AM
+  
+      if (isWeekendTime) {
+        countdownEl.style.display = 'none';
+  
+        if (!document.getElementById(weekendMessageId)) {
+          const msg = document.createElement('div');
+          msg.id = weekendMessageId;
+          msg.className = 'time';
+          msg.textContent = '🎉 WEEKEND! 🎉';
+          document.querySelector('.countdown').appendChild(msg);
+          countdownNaarEl.style.display = 'none';
+        }
+  
+        return;
+      } else {
+        countdownEl.style.display = 'block';
+        const existingMsg = document.getElementById(weekendMessageId);
+        if (existingMsg) existingMsg.remove();
+        countdownNaarEl.style.display = 'block';
+      }
+  
       // Set nextFriday to Friday at 5 PM
-      nextFriday.setDate(now.getDate() + (5 - now.getDay() + 7) % 7);
-      nextFriday.setHours(17, 0, 0, 0); // 5 PM
-
-      // If it's already past 5 PM on Friday, move to next Friday
+      let nextFriday = new Date(now);
+      nextFriday.setDate(now.getDate() + (5 - day + 7) % 7);
+      nextFriday.setHours(17, 0, 0, 0);
+  
+      // If we're already past Friday 5 PM, go to next week
       if (now > nextFriday) {
         nextFriday.setDate(nextFriday.getDate() + 7);
       }
-
+  
       const timeDiff = nextFriday - now;
-
-      // Time calculations
+  
       const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+      const hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
       const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
       const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000).toString().padStart(2, '0');
       const milliseconds = (timeDiff % 1000).toString().padStart(3, '0');
-
+  
       // Update the labels
       document.getElementById('days').textContent = days > 0 ? days : '';
       document.getElementById('days-unit').textContent = days > 0 ? (days === 1 ? 'dag' : 'dagen') : '';
-      document.getElementById('hours').textContent = days > 0 || hours > 0 ? hours : '';
-      document.getElementById('hours-unit').textContent = days > 0 || hours > 0 ? (hours === 1 ? 'uur' : 'uren') : '';
-      document.getElementById('minutes').textContent = hours > 0 || minutes > 0 ? minutes : '';
-      document.getElementById('minutes-unit').textContent = hours > 0 || minutes > 0 ? (minutes === 1 ? 'minuut' : 'minuten') : '';
+      document.getElementById('hours').textContent = days > 0 || hoursLeft > 0 ? hoursLeft : '';
+      document.getElementById('hours-unit').textContent = days > 0 || hoursLeft > 0 ? (hoursLeft === '01' ? 'uur' : 'uren') : '';
+      document.getElementById('minutes').textContent = hoursLeft > 0 || minutes > 0 ? minutes : '';
+      document.getElementById('minutes-unit').textContent = hoursLeft > 0 || minutes > 0 ? (minutes === '01' ? 'minuut' : 'minuten') : '';
       document.getElementById('seconds').textContent = seconds;
-      document.getElementById('seconds-unit').textContent = seconds === 1 ? 'seconde' : 'seconden';
+      document.getElementById('seconds-unit').textContent = seconds === '01' ? 'seconde' : 'seconden';
       document.getElementById('milliseconds').textContent = milliseconds;
-      document.getElementById('milliseconds-unit').textContent = milliseconds === 1 ? 'milliseconde' : 'milliseconden';
+      document.getElementById('milliseconds-unit').textContent = milliseconds === '001' ? 'milliseconde' : 'milliseconden';
     }
-
-    // Update every 1ms for smooth milliseconds
+  
     setInterval(updateCountdown, 1);
-    updateCountdown(); // Initialize immediately
+    updateCountdown();
   </script>
+  
   <!-- 100% privacy-first analytics -->
 <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
