@@ -1,169 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Daily countdown to the weekend!">
-  <meta name="keywords" content="weekend, countdown, time, days, hours, minutes, seconds, milliseconds">
-  <meta name="author" content="Bjarne Verschorre">
-  <meta name="theme-color" content="#121212">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="darkreader-lock">
-  <title>Bijna WEEKEND! 🎉</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #121212;
-      color: #fff;
-    }
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Countdown naar het weekend – elke week tot vrijdag 17:00. In het weekend tonen we WEEKEND 🎉 tot maandag 08:00." />
+	<meta name="theme-color" content="#111827" />
+	<title>Weekend Countdown</title>
 
-    .countdown {
-      text-align: center;
-      background-color: #1e1e1e;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      color: #fff;
-    }
-
-    .time {
-      font-size: 3rem;
-      font-weight: bold;
-      color: #a0a0a0;
-    }
-
-    .unit {
-      font-size: 1.2rem;
-      color: #888;
-    }
-
-    .time span {
-      margin: 0 8px;
-    }
-
-    footer {
-      position: absolute;
-      bottom: 20px;
-      text-align: center;
-      font-size: 1rem;
-      color: #888;
-    }
-
-    footer a {
-      color: #4da6ff;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+	<link rel="stylesheet" href="./styles.css" />
 </head>
+<body class="site">
+	<main class="site__main" role="main">
+		<section class="countdown" aria-label="Countdown naar het weekend">
+			<h1 class="countdown__title">Countdown Naar Het Weekend</h1>
 
-<body>
-  <div class="countdown">
-    <h1 id="countdown-naar">Countdown naar WEEKEND</h1>
-    <div class="time" id="countdown">
-      <span id="days"></span> <span class="unit" id="days-unit">dagen</span>
-      <span id="hours"></span> <span class="unit" id="hours-unit">uren</span>
-      <span id="minutes"></span> <span class="unit" id="minutes-unit">minuten</span>
-      <span id="seconds"></span> <span class="unit" id="seconds-unit">seconden</span>
-      <span id="milliseconds"></span> <span class="unit" id="milliseconds-unit">milliseconden</span>
-    </div>
-  </div>
+			<div class="countdown__card" role="group" aria-live="polite" aria-atomic="true">
 
-  <footer>
-      <p>made by <a href="https://bjarne.verschorre.be" target="_blank">me</a></p>
-  </footer>
+				<div class="countdown__grid" id="js-grid" aria-hidden="false">
+					<div class="countdown__segment">
+						<div class="countdown__time" id="js-days">0</div>
+						<div class="countdown__label">dagen</div>
+					</div>
+					<div class="countdown__separator" aria-hidden="true">:</div>
+					<div class="countdown__segment">
+						<div class="countdown__time" id="js-hours">00</div>
+						<div class="countdown__label">uren</div>
+					</div>
+					<div class="countdown__separator" aria-hidden="true">:</div>
+					<div class="countdown__segment">
+						<div class="countdown__time" id="js-minutes">00</div>
+						<div class="countdown__label">min</div>
+					</div>
+					<div class="countdown__separator" aria-hidden="true">:</div>
+					<div class="countdown__segment">
+						<div class="countdown__time" id="js-seconds">00</div>
+						<div class="countdown__label">sec</div>
+					</div>
+				</div>
 
+				<div class="countdown__weekend" id="js-weekend" aria-hidden="true" hidden>
+					<span class="countdown__weekend-text" role="img" aria-label="Weekend met feest">🎉🎉 WEEKEND 🎉🎉</span>
+				</div>
+			</div>
 
-  <script>
-    function updateCountdown() {
-      const now = new Date();
-      const day = now.getDay(); // 0 = Sunday, 5 = Friday, 6 = Saturday
-      const hours = now.getHours();
-  
-      const countdownEl = document.getElementById('countdown');
-      const countdownNaarEl = document.getElementById('countdown-naar');
-      const weekendMessageId = 'weekend-message';
-  
-      // Check if we are in the weekend window (Friday 5 PM - Monday 12 AM)
-      const isWeekendTime =
-        (day === 5 && hours >= 17) || // Friday after 5 PM
-        day === 6 || // Saturday all day
-        (day === 0) || // Sunday all day
-        (day === 1 && hours === 0); // Monday until 12 AM
-  
-      if (isWeekendTime) {
-        countdownEl.style.display = 'none';
-  
-        if (!document.getElementById(weekendMessageId)) {
-          const msg = document.createElement('div');
-          msg.id = weekendMessageId;
-          msg.className = 'time';
-          msg.textContent = '🎉 WEEKEND! 🎉';
-          document.querySelector('.countdown').appendChild(msg);
-          countdownNaarEl.style.display = 'none';
-        }
-  
-        return;
-      } else {
-        countdownEl.style.display = 'block';
-        const existingMsg = document.getElementById(weekendMessageId);
-        if (existingMsg) existingMsg.remove();
-        countdownNaarEl.style.display = 'block';
-      }
-  
-      // Set nextFriday to Friday at 5 PM
-      let nextFriday = new Date(now);
-      nextFriday.setDate(now.getDate() + (5 - day + 7) % 7);
-      nextFriday.setHours(17, 0, 0, 0);
-  
-      // If we're already past Friday 5 PM, go to next week
-      if (now > nextFriday) {
-        nextFriday.setDate(nextFriday.getDate() + 7);
-      }
-  
-      const timeDiff = nextFriday - now;
-  
-      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-      const hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-      const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000).toString().padStart(2, '0');
-      const milliseconds = (timeDiff % 1000).toString().padStart(3, '0');
-  
-      // Update the labels
-      document.getElementById('days').textContent = days > 0 ? days : '';
-      document.getElementById('days-unit').textContent = days > 0 ? (days === 1 ? 'dag' : 'dagen') : '';
-      document.getElementById('hours').textContent = days > 0 || hoursLeft > 0 ? hoursLeft : '';
-      document.getElementById('hours-unit').textContent = days > 0 || hoursLeft > 0 ? (hoursLeft === '01' ? 'uur' : 'uren') : '';
-      document.getElementById('minutes').textContent = hoursLeft > 0 || minutes > 0 ? minutes : '';
-      document.getElementById('minutes-unit').textContent = hoursLeft > 0 || minutes > 0 ? (minutes === '01' ? 'minuut' : 'minuten') : '';
-      document.getElementById('seconds').textContent = seconds;
-      document.getElementById('seconds-unit').textContent = seconds === '01' ? 'seconde' : 'seconden';
-      document.getElementById('milliseconds').textContent = milliseconds;
-      document.getElementById('milliseconds-unit').textContent = milliseconds === '001' ? 'milliseconde' : 'milliseconden';
-    }
-  
-    setInterval(updateCountdown, 1);
-    updateCountdown();
-  </script>
-  
-  <!-- 100% privacy-first analytics -->
-<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
+		</section>
+	</main>
+
+	<script src="./script.js" defer></script>
 </body>
-
 </html>
+
+
