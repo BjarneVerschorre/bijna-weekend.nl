@@ -67,6 +67,24 @@
 	margin-inline: auto;
 }
 
+.site__footer {
+	margin-top: var(--gap-xl);
+	justify-self: center;
+}
+
+.footer__link {
+	color: var(--color-text-dim);
+	text-decoration: none;
+	font-weight: 500;
+	font-size: clamp(0.72rem, 0.3vw + 0.68rem, 0.9rem);
+}
+
+.footer__link:hover,
+.footer__link:focus {
+	color: var(--color-text);
+	text-decoration: underline;
+}
+
 /* Countdown block */
 .countdown {
 	display: grid;
